@@ -43,6 +43,7 @@ def tags(tag_name):
         def func_wrapper(n_name):
             print("3) Under func_wrapper(n_name) - This will be the name variable' chet.com': {}".format(n_name))
             print("   www will be added to chet.com from the get_text(name) function")
+            print("   note: you could use *args in place of n_name")
             return "http://{0}{1}".format(func(n_name), tag_name)
         return func_wrapper
     return tags_deco
