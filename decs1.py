@@ -33,6 +33,8 @@ def cost2(x, y):
 print(cost2(4, 20))
 
 print()
+
+
 # Example like flask...
 def tags(tag_name):
     print("1) Under def tags -  This will be from @tags('/app'): {}'".format(tag_name))
