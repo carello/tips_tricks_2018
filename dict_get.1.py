@@ -7,3 +7,5 @@ print("Value : {}".format(mydict.get('Education', "Never")))
 
 
 print('Value : {}'.format(mydict['Age']))
+
+print(mydict)
