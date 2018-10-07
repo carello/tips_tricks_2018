@@ -88,4 +88,8 @@ if __name__ == '__main__':
     if debug:
         run_logging()
 
+    if data[0] == 'say':
+        logger.debug('Incoming message: {}'.format(data[0]))
+        sc_conn.sendall(data[0].encode('utf-8'))
+
 # ===================
