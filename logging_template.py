@@ -75,13 +75,10 @@ def run_logging():
         format='%(asctime)s %(levelname)-8s %(message)s',
         level=logging.DEBUG,
         datefmt='%Y-%m-%d %H:%M:%S',
-        #filename='tcp_server.log',
-        #filemode='w',
         handlers=[
             logging.FileHandler("tcp_server.log"),
             logging.StreamHandler(sys.stdout)
         ])
-    # logging.getLogger().addHandler(logging.StreamHandler())
 
 
 if __name__ == '__main__':
