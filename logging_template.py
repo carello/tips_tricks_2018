@@ -61,4 +61,31 @@ if data[0] == 'say':
     logger.debug('Incoming message: {}'.format(data[0]))
     sc_conn.sendall(data[0].encode('utf-8'))
 
-# ===========================
+
+
+##################
+# Example 4
+
+debug = True   # change to False to disable logging
+
+logger = logging.getLogger(__name__)
+
+def run_logging():
+    logging.basicConfig(
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        level=logging.DEBUG,
+        datefmt='%Y-%m-%d %H:%M:%S',
+        #filename='tcp_server.log',
+        #filemode='w',
+        handlers=[
+            logging.FileHandler("tcp_server.log"),
+            logging.StreamHandler(sys.stdout)
+        ])
+    # logging.getLogger().addHandler(logging.StreamHandler())
+
+
+if __name__ == '__main__':
+    if debug:
+        run_logging()
+
+# ===================
