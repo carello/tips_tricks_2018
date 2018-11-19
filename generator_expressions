@@ -1,0 +1,93 @@
+Last time, we saw how we can decompose all sorts of Python functionality by using generators.
+But at a certain point, you have to wonder: Is it really worth creating an entire generator function,
+just so that you can get the data back, one little bit at a time?
+
+Not necessarily: While it's often convenient to create a generator function, it turns out that our
+generators are often taking information in one sequence and turning it into another sequence.
+In other words, they're doing something that we would do in a list comprehension.
+
+People who learn about list comprehensions often start to experiment with them, to see what they can do.
+For example, if you discover that you can convert strings to ints:
+    In [1]: mylist = ['10', '20', '30']
+
+    In [2]: [int(x) for x in mylist]
+    Out[2]: [10, 20, 30]
+
+You might then play with set comprehensions:
+    In [3]: {int(x) for x in mylist}
+    Out[3]: {10, 20, 30}
+
+You might then play with dict comprehensions:
+    In [4]: {int(x):int(x)**2 for x in mylist}
+    Out[4]: {10: 100, 20: 400, 30: 900}
+
+You then might say, "Hmm, I wonder if there's a tuple comprehension?"
+    In [7]: (int(x) for x in mylist)
+    Out[7]: <generator object <genexpr> at 0x1108f0390>
+
+The answer is: No, there's no such thing as a tuple comprehension.  But you don't get an error
+if you use round parentheses.  Rather, you get a generator -- the same sort of object
+you'll get after executing a generator function.
+
+In other words, we now see that there are two different ways to create a generator.
+In one, you create and then execute a generator function. In the other, you execute
+something that looks like a comprehension, but which returns a generator.
+
+Why would you want such a thing?  Well, it's often better to use a generator that returns
+one item at a time, rather than a function that returns a long list -- we've seen that many times.
+A generator expression lets you do the same thing, in situations that might be well served by a list comprehension.
+
+For example, let's assume that I want to reverse each line in a file.  I could do something like this:
+    In [1]: (one_line[::-1]
+       ...:  for one_line in open('/etc/passwd'))
+    Out[1]: <generator object <genexpr> at 0x1055e7318>
+
+If I had used a regular list comprehension, then I would have gotten a list back. And if the
+file in question were a terabyte long, then I would have run out of memory, with Python trying
+to allocate a massive list.  But by using a generator expression, I can describe what I want,
+and even work with a massive file.  And sure, I could have done that with a generator function,
+but generator expressions are inline and thus often easier to write.
+
+Of course, I can assign a generator expression to a variable. For example:
+    In [2]: g = (one_line[::-1]
+       ...:  for one_line in open('/etc/passwd'))
+
+    In [3]: next(g)
+    Out[3]: '\n##'
+
+    In [4]: next(g)
+    Out[4]: '\nesabataD resU #'
+
+    In [5]: next(g)
+    Out[5]: '\n #'
+
+We see here that I'm getting the lines of the file, one at a time, reversed.  And the maximum
+amount of memory that we'll use when evaluating this generator expression is the length of the
+longest line in the file. Even if the file is a terabyte long, we'll still probably only need
+80-100 bytes of storage for our Python string.
+
+Among many Python developers, it has become increasingly acceptable to use generator expressions
+instead of list comprehensions in many situations -- not just where you'll get a lot of data,
+but where you want to minimize potential memory usage. After all, if you're outputting a short
+series of values, then it doesn't matter whether you use a list comprehension or a generator expression.
+And if you output a long series of values, then everyone would agree that it's better to use a generator expression.
+
+Let's say that I have a list of integers, and I want to print them with asterisks (*) between them.
+I'd love to use "str.join", but "str.join" only works on strings. I can use a list comprehension to convert them:
+    In [6]: mylist = [10, 20, 30]
+
+    In [7]: '*'.join([str(x) for x in mylist])
+    Out[7]: '10*20*30'
+
+The thing is, I can use a generator expression instead:
+    In [9]: '*'.join((str(x) for x in mylist))
+    Out[9]: '10*20*30'
+
+And here's the most amazing thing: Because of Python's syntax, we can actually remove
+one of the two layers of parentheses here:
+    In [10]: '*'.join(str(x) for x in mylist)
+    Out[10]: '10*20*30'
+
+Meaning: If you are invoking a function or method that can take a generator, you can just describe
+the values you're passing with a generator expression, without even adding a second set of parentheses.
+
