@@ -30,17 +30,13 @@ while True:
     if choice.isalnum():
         if choice <= str(len(menu_items)):
             for k, v, in menu_items[int(choice) - 1].items():
-                v()
+                print(v())
     else:
         print("Please make a selection from the menu")
 
 
-
     # Alt method, same outcome
-    result = menu_items[int(choice)]
-    v = result.values()
-    for i in v:
-        print(i())
-
-
-
+    #result = menu_items[int(choice)]
+    #v = result.values()
+    #for i in v:
+    #    print(i())
